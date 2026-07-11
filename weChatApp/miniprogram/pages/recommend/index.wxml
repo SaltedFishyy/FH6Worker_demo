@@ -1,0 +1,107 @@
+<view class="recommend-page">
+  <image class="page-bg" src="../../images/background.jpg" mode="aspectFill"></image>
+  <view class="page-layer">
+  <view class="custom-nav">
+    <view class="custom-nav-title"></view>
+  </view>
+  <view class="hero">
+    <view>
+      <view class="brand-title">
+        <text class="brand-fh">FH6</text><text class="brand-text">车辆推荐</text>
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="tabs" scroll-x="true" enable-flex="true">
+    <block wx:for="{{useCaseTabs}}" wx:key="value">
+      <view
+        class="tab {{activeUseCase == item.value ? 'tab-active' : ''}}"
+        data-index="{{index}}"
+        bindtap="onTabTap"
+      >
+        <image class="tab-icon" src="{{activeUseCase == item.value ? item.activeIcon : item.icon}}" mode="aspectFit"></image>
+        <text>{{item.label}}</text>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="filter-title">级别选择</view>
+  <scroll-view class="class-tabs" scroll-x="true" enable-flex="true">
+    <block wx:for="{{classTabs}}" wx:key="value">
+      <view
+        class="class-tab {{activeClass == item.value ? 'class-tab-active' : ''}} class-tab-{{item.value}}"
+        data-index="{{index}}"
+        bindtap="onClassTap"
+      >
+        {{item.label}}
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="car-list">
+    <view wx:if="{{cars.length == 0}}" class="empty-state">
+      <view class="empty-title">当前筛选暂无推荐车辆</view>
+      <view class="empty-copy">可以切换其它级别，或后续在推荐数据里补充该级别车辆。</view>
+    </view>
+
+    <block wx:for="{{cars}}" wx:key="id">
+      <view class="car-card {{item.expanded ? 'car-card-expanded' : ''}}" data-id="{{item.id}}" bindtap="toggleCar">
+        <view class="card-head">
+          <view class="car-copy">
+            <view class="car-name">{{item.name}}</view>
+          </view>
+          <view class="performance-badge grade-wrap-{{item.carClass}}">
+            <view class="grade-badge grade-{{item.carClass}}">{{item.carClass}}</view>
+            <view class="pi-badge">{{item.pi}}</view>
+          </view>
+        </view>
+
+        <view wx:if="{{item.expanded}}" class="card-detail">
+          <view class="car-meta">{{item.useCaseLabel}} · {{item.drivetrain}} · {{item.tireCompoundLabel}}</view>
+
+          <view class="car-media">
+            <image class="car-media-bg" src="../../images/carBackground.jpg" mode="aspectFill"></image>
+            <image
+              wx:if="{{item.imageDisplaySrc}}"
+              class="car-image"
+              src="{{item.imageDisplaySrc}}"
+              mode="aspectFit"
+              data-id="{{item.id}}"
+              binderror="onCarImageError"
+            ></image>
+            <view wx:else class="car-visual visual-{{item.carClass}}">
+              <view class="visual-class">{{item.carClass}}</view>
+              <view class="visual-lines">
+                <view></view>
+                <view></view>
+                <view></view>
+              </view>
+            </view>
+          </view>
+
+          <view class="tag-row">
+            <block wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+              <text class="tag">{{tag}}</text>
+            </block>
+          </view>
+
+          <view wx:if="{{item.tuneCodes.length}}" class="tune-code-panel {{item.multipleTuneCodes ? 'tune-code-panel-list' : ''}}">
+            <view>
+              <view class="code-label">调校代码</view>
+              <view class="code-hint">在游戏内搜索并套用</view>
+            </view>
+            <view class="tune-code-list">
+              <block wx:for="{{item.tuneCodes}}" wx:for-item="code" wx:key="*this">
+                <view class="tune-code-row">
+                  <view wx:if="{{item.multipleTuneCodes}}" class="tune-code-index">调校代码 {{index + 1}}</view>
+                  <view class="tune-code">{{code}}</view>
+                </view>
+              </block>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+  </view>
+</view>

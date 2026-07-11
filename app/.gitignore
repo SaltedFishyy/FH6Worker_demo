@@ -1,0 +1,8 @@
+build/bin
+node_modules
+frontend/dist
+frontend/package.json.md5
+.gocache
+data
+_tmp_*
+frontend/_tmp_*

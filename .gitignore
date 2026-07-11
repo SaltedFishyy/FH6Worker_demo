@@ -1,0 +1,36 @@
+# Local and generated data
+_tmp_*
+*.db
+*.db-journal
+*.log
+
+# Dependencies and caches
+node_modules/
+**/node_modules/
+.gocache/
+**/.gocache/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyc.*
+
+# Build outputs and temporary source backups
+app/build/
+app/data/
+*.[0-9]*
+app/frontend/dist/
+app/frontend/package.json.md5
+
+# Private local configuration
+weChatApp/project.private.config.json
+
+# Generated executables and downloaded tool archives
+demo.exe
+tools/*.zip
+tools/autohotkey-v2.0.26/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

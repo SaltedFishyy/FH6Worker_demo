@@ -1,0 +1,332 @@
+<view class="page">
+  <image class="page-bg" src="../../images/background.jpg" mode="aspectFill"></image>
+  <view class="page-layer">
+  <view class="custom-nav">
+    <view class="custom-nav-title"></view>
+  </view>
+  <ad wx:if="{{bannerAdUnitId}}" unit-id="{{bannerAdUnitId}}" class="top-ad"></ad>
+
+  <view class="recommend-entry" bindtap="openRecommendPage">
+    <view class="entry-main">
+      <image class="entry-icon" src="../../images/icons/entry-car-star.svg" mode="aspectFit"></image>
+      <view class="recommend-entry-title">不会选车？</view>
+    </view>
+    <view class="recommend-entry-action">查看车辆推荐 ></view>
+  </view>
+
+  <view class="upgrade-entry" bindtap="openUpgradeGuidePage">
+    <view class="entry-main">
+      <image class="entry-icon" src="../../images/icons/entry-upgrade.svg" mode="aspectFit"></image>
+      <view class="upgrade-entry-title">先改装再调校？</view>
+    </view>
+    <view class="upgrade-entry-action">查看配件攻略 ></view>
+  </view>
+
+  <view class="header">
+    <view>
+      <view class="brand-title">
+        <text class="brand-fh">FH6</text><text class="brand-text">车辆调校小助手</text>
+        <text class="model-version">{{config.modelVersion}}</text>
+      </view>
+    </view>
+    <view wx:if="{{quotaText}}" class="quota">{{quotaText}}</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">
+      <image class="section-title-icon" src="../../images/icons/form-car-lime.svg" mode="aspectFit"></image>
+      <text>车辆基础信息</text>
+    </view>
+    <view class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-road.svg" mode="aspectFit"></image>
+        <text>用途选择</text>
+      </view>
+      <picker class="picker" range="{{useCaseOptions}}" range-key="label" value="{{useCaseIndex}}" data-field="useCase" bindchange="onPickerChange">
+        <view class="select-value">{{useCaseLabel}}</view>
+      </picker>
+    </view>
+    <view class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-gauge.svg" mode="aspectFit"></image>
+        <text>车辆性能指标PI</text>
+      </view>
+      <input class="input" type="number" value="{{form.pi}}" data-field="pi" bindinput="onInput" placeholder="100-999" />
+    </view>
+    <view class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-drivetrain.svg" mode="aspectFit"></image>
+        <text>驱动形式</text>
+      </view>
+      <picker class="picker" range="{{drivetrainOptions}}" range-key="label" value="{{drivetrainIndex}}" data-field="drivetrain" bindchange="onPickerChange">
+        <view class="select-value">{{drivetrainLabel}}</view>
+      </picker>
+    </view>
+    <view class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-tire.svg" mode="aspectFit"></image>
+        <text>轮胎类型</text>
+      </view>
+      <picker class="picker" range="{{tireCompoundOptions}}" range-key="label" value="{{tireCompoundIndex}}" data-field="tireCompound" bindchange="onPickerChange">
+        <view class="select-value">{{tireCompoundLabel}}</view>
+      </picker>
+    </view>
+    <view class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-weight.svg" mode="aspectFit"></image>
+        <text>车重 kg</text>
+      </view>
+      <input class="input" type="number" value="{{form.weightKG}}" data-field="weightKG" bindinput="onInput" placeholder="车辆重量" />
+    </view>
+    <view class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-pie.svg" mode="aspectFit"></image>
+        <text>前轴配重 %</text>
+      </view>
+      <input class="input" type="number" value="{{form.frontWeightPct}}" data-field="frontWeightPct" bindinput="onInput" placeholder="1-99" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">
+      <image class="section-title-icon" src="../../images/icons/form-gear-lime.svg" mode="aspectFit"></image>
+      <text>齿轮调校</text>
+    </view>
+    <view class="toggle-row">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-gear.svg" mode="aspectFit"></image>
+        <text>{{form.gearingEnabled ? '关闭齿轮调校' : '打开齿轮调校'}}</text>
+      </view>
+      <view class="switch-control">
+        <switch class="gear-switch" checked="{{form.gearingEnabled}}" data-field="gearingEnabled" bindchange="onSwitchChange" />
+      </view>
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-power.svg" mode="aspectFit"></image>
+        <text>马力 kW</text>
+      </view>
+      <input class="input" type="digit" value="{{form.powerKW}}" data-field="powerKW" bindinput="onInput" placeholder="可选" />
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-torque.svg" mode="aspectFit"></image>
+        <text>扭矩 Nm</text>
+      </view>
+      <input class="input" type="digit" value="{{form.torqueNM}}" data-field="torqueNM" bindinput="onInput" placeholder="可选" />
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-rpm.svg" mode="aspectFit"></image>
+        <text>最高转速</text>
+      </view>
+      <input class="input" type="number" value="{{form.redlineRPM}}" data-field="redlineRPM" bindinput="onInput" placeholder="1000-20000" />
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-gear.svg" mode="aspectFit"></image>
+        <text>挡位数</text>
+      </view>
+      <input class="input" type="number" value="{{form.gearCount}}" data-field="gearCount" bindinput="onInput" placeholder="2-10" />
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field tire-size-field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-tire.svg" mode="aspectFit"></image>
+        <text>前轮尺寸（选填）</text>
+        <text class="help-icon form-help-icon" data-title="前轮尺寸" data-description="前轮尺寸为选填。前后轮不同会影响刹车平衡、差速器和高速推头修正；不填前轮时按后轮尺寸处理。" catchtap="showTuneDescription">?</text>
+      </view>
+      <view class="tire-size-inputs">
+        <input class="tire-part tire-width" type="number" value="{{form.frontTireWidth}}" data-field="frontTireWidth" bindinput="onInput" placeholder="245" />
+        <text class="tire-fixed">/</text>
+        <input class="tire-part tire-aspect" type="number" value="{{form.frontTireAspectRatio}}" data-field="frontTireAspectRatio" bindinput="onInput" placeholder="35" />
+        <text class="tire-fixed">R</text>
+        <input class="tire-part tire-rim" type="number" value="{{form.frontTireRimInches}}" data-field="frontTireRimInches" bindinput="onInput" placeholder="19" />
+      </view>
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field tire-size-field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-tire.svg" mode="aspectFit"></image>
+        <text>后轮尺寸</text>
+        <text class="help-icon form-help-icon" data-title="后轮尺寸" data-description="后轮尺寸用于齿轮计算；前轮未填写时，模型会按后轮尺寸处理前后轮差异。" catchtap="showTuneDescription">?</text>
+      </view>
+      <view class="tire-size-inputs">
+        <input class="tire-part tire-width" type="number" value="{{form.tireWidth}}" data-field="tireWidth" bindinput="onInput" placeholder="245" />
+        <text class="tire-fixed">/</text>
+        <input class="tire-part tire-aspect" type="number" value="{{form.tireAspectRatio}}" data-field="tireAspectRatio" bindinput="onInput" placeholder="35" />
+        <text class="tire-fixed">R</text>
+        <input class="tire-part tire-rim" type="number" value="{{form.tireRimInches}}" data-field="tireRimInches" bindinput="onInput" placeholder="19" />
+      </view>
+    </view>
+    <view wx:if="{{form.gearingEnabled}}" class="field">
+      <view class="label">
+        <image class="field-icon" src="../../images/icons/form-speed.svg" mode="aspectFit"></image>
+        <text>目标速度 km/h</text>
+      </view>
+      <input class="input" type="number" value="{{form.targetTopSpeedKmh}}" data-field="targetTopSpeedKmh" bindinput="onInput" placeholder="最高速度" />
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="primary-button" loading="{{loading}}" disabled="{{loading}}" bindtap="generateTune">生成调校</button>
+    <button class="secondary-button" disabled="{{loading}}" bindtap="resetForm">重置</button>
+  </view>
+
+  <view wx:if="{{result}}" class="result">
+    <view class="result-head">
+      <view>
+        <view class="result-title">调校结果</view>
+      </view>
+      <view class="performance-wrap">
+        <view class="performance-badge grade-wrap-{{result.profileDraft.carClass}}">
+          <view class="grade-badge grade-{{result.profileDraft.carClass}}">{{result.profileDraft.carClass}}</view>
+          <view class="pi-badge">{{result.profileDraft.pi}}</view>
+        </view>
+        <view class="drive-badge">{{result.profileDraft.drivetrain}}</view>
+      </view>
+    </view>
+
+    <ad wx:if="{{resultBannerAdUnitId}}" unit-id="{{resultBannerAdUnitId}}" class="result-ad"></ad>
+
+    <view wx:if="{{resultEditTipVisible}}" class="edit-tip">
+      <view class="edit-tip-copy">双击数值可手动修改，失焦后自动保存。</view>
+      <view class="edit-tip-action" bindtap="closeResultEditTip">知道了</view>
+    </view>
+
+    <block wx:for="{{resultGroups}}" wx:for-item="group" wx:key="key">
+      <view class="result-group">
+        <view class="group-title">{{group.label}}</view>
+        <block wx:for="{{group.items}}" wx:for-item="field" wx:key="rowId">
+          <view class="result-row">
+            <view class="result-label-wrap">
+              <text class="result-label">{{field.label}}</text>
+              <text wx:if="{{field.description}}" class="help-icon" data-title="{{field.label}}" data-description="{{field.description}}" catchtap="showTuneDescription">?</text>
+              <text wx:if="{{field.manualEdited}}" class="edited-badge">已改</text>
+            </view>
+            <view class="result-value" data-field-key="{{field.fieldKey}}" data-editable="{{field.editable}}" bindtap="onResultValueTap">
+              <input wx:if="{{editingFieldKey == field.fieldKey}}" class="edit-input" type="text" value="{{editingValue}}" focus data-field-key="{{field.fieldKey}}" bindinput="onEditInput" bindblur="finishFieldEdit" bindconfirm="finishFieldEdit" confirm-type="done" />
+              <block wx:else>{{field.displayValue}} <text class="unit">{{field.unit}}</text></block>
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+
+    <view wx:if="{{warnings.length}}" class="result-group">
+      <view class="group-title">提示</view>
+      <block wx:for="{{warnings}}" wx:key="*this">
+        <view class="plain-note">{{item}}</view>
+      </block>
+    </view>
+
+    <view wx:if="{{nextTestPlan.length}}" class="result-group">
+      <view class="group-title">下一步测试</view>
+      <block wx:for="{{nextTestPlan}}" wx:key="*this">
+        <view class="plain-note">{{item}}</view>
+      </block>
+    </view>
+
+    <view class="result-actions result-actions-bottom">
+      <button wx:if="{{!shareLinkReady}}" class="share-link-button" loading="{{shareLoading}}" disabled="{{shareLoading}}" bindtap="prepareShareTune">分享</button>
+      <button wx:else class="share-link-button" open-type="share">分享给好友</button>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-mask">
+    <view class="tire-spinner">
+      <image class="tire-image" src="../../images/tire-loading.svg" mode="aspectFit"></image>
+    </view>
+    <view class="loading-text">计算调校中</view>
+  </view>
+
+  <view class="preference-fab" bindtap="openPreferencePanel">偏好</view>
+
+  <view wx:if="{{preferenceOpen}}" class="preference-mask" catchtap="closePreferencePanel">
+    <view class="preference-panel" catchtap="noop">
+      <view class="preference-head">
+        <view>
+          <view class="preference-title">调校偏好</view>
+        </view>
+        <view class="preference-version">{{config.modelVersion}}</view>
+      </view>
+      <scroll-view class="preference-scroll" scroll-y>
+        <view class="preference-section preference-section-light">
+          <view class="preference-section-title">基础偏好</view>
+          <view class="preference-row">
+            <view class="preference-label">驾驶风格 {{tempPreference.balanceBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.balanceBias}}" data-field="balanceBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>稳定抓地</text><text>中性</text><text>灵活滑动</text></view>
+          </view>
+          <view class="preference-row">
+            <view class="preference-label">悬挂支撑 {{tempPreference.stiffnessBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.stiffnessBias}}" data-field="stiffnessBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>软</text><text>中性</text><text>硬</text></view>
+          </view>
+        </view>
+
+        <view wx:if="{{form.gearingEnabled}}" class="preference-section preference-section-dark">
+          <view class="preference-section-title">齿轮反馈</view>
+          <view class="preference-row">
+            <view class="preference-label">齿轮取向 {{tempPreference.speedBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.speedBias}}" data-field="speedBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>加速</text><text>均衡</text><text>极速</text></view>
+          </view>
+          <view class="preference-row">
+            <view class="preference-label">起步/出弯牵引 {{tempPreference.tractionBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.tractionBias}}" data-field="tractionBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>防打滑</text><text>均衡</text><text>更爆发</text></view>
+          </view>
+          <view class="preference-row">
+            <view class="preference-label">换挡衔接 {{tempPreference.shiftBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.shiftBias}}" data-field="shiftBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>挡位更长</text><text>均衡</text><text>保持高转</text></view>
+          </view>
+        </view>
+
+        <view wx:if="{{form.useCase == 'Road' || form.useCase == 'Rally'}}" class="preference-section preference-section-dark">
+          <view class="preference-section-title">赛道反馈</view>
+          <view class="preference-helper">不选择车辆症状时不启用赛道反馈</view>
+          <view class="feedback-chip-row">
+            <view wx:for="{{preferenceSceneOptions}}" wx:key="value" class="feedback-chip {{tempPreference.trackFeedbackScene == item.value ? 'active' : ''}}" data-value="{{item.value}}" bindtap="onPreferenceSceneTap">{{item.label}}</view>
+          </view>
+          <view wx:if="{{tempPreference.trackFeedbackScene}}" class="feedback-chip-row symptoms">
+            <view wx:for="{{tempPreferenceSymptoms}}" wx:key="value" class="feedback-chip {{tempPreference.trackFeedbackSymptom == item.value ? 'active' : ''}}" data-value="{{item.value}}" bindtap="onPreferenceSymptomTap">{{item.label}}</view>
+          </view>
+          <view wx:else class="preference-helper empty-feedback">当前不启用赛道反馈。</view>
+          <view wx:if="{{tempPreference.trackFeedbackScene && tempPreference.trackFeedbackSymptom}}" class="preference-row track-strength-row">
+            <view class="preference-label">赛道修正强度 {{tempPreference.correctionStrengthBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.correctionStrengthBias}}" data-field="correctionStrengthBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>轻微</text><text>标准</text><text>明显</text></view>
+          </view>
+        </view>
+
+        <view wx:if="{{form.useCase == 'Drift'}}" class="preference-section preference-section-dark">
+          <view class="preference-section-title">漂移反馈</view>
+          <view class="preference-helper">选择最明显的一个问题，避免多项修正互相抵消。</view>
+          <view class="feedback-chip-row symptoms">
+            <view wx:for="{{driftFeedbackOptions}}" wx:key="value" class="feedback-chip {{tempPreference.driftFeedbackSymptom == item.value ? 'active' : ''}}" data-value="{{item.value}}" bindtap="onDriftFeedbackTap">{{item.label}}</view>
+          </view>
+          <view wx:if="{{tempPreference.driftFeedbackSymptom}}" class="preference-row track-strength-row">
+            <view class="preference-label">漂移修正强度 {{tempPreference.driftCorrectionStrengthBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.driftCorrectionStrengthBias}}" data-field="driftCorrectionStrengthBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>轻微</text><text>标准</text><text>明显</text></view>
+          </view>
+        </view>
+
+        <view wx:if="{{form.useCase == 'Offroad'}}" class="preference-section preference-section-dark">
+          <view class="preference-section-title">越野反馈</view>
+          <view class="preference-helper">选择最明显的一个问题，优先修正贴地、行程和牵引稳定。</view>
+          <view class="feedback-chip-row symptoms">
+            <view wx:for="{{offroadFeedbackOptions}}" wx:key="value" class="feedback-chip {{tempPreference.offroadFeedbackSymptom == item.value ? 'active' : ''}}" data-value="{{item.value}}" bindtap="onOffroadFeedbackTap">{{item.label}}</view>
+          </view>
+          <view wx:if="{{tempPreference.offroadFeedbackSymptom}}" class="preference-row track-strength-row">
+            <view class="preference-label">越野修正强度 {{tempPreference.offroadCorrectionStrengthBias}}</view>
+            <slider min="50" max="150" step="1" value="{{tempPreference.offroadCorrectionStrengthBias}}" data-field="offroadCorrectionStrengthBias" bindchanging="onPreferenceSliderChange" bindchange="onPreferenceSliderChange" activeColor="#bfff00" block-color="#0fae96" />
+            <view class="scale-row"><text>轻微</text><text>标准</text><text>明显</text></view>
+          </view>
+        </view>
+      </scroll-view>
+      <button class="preference-done" bindtap="applyPreferencePanel">完成并重新生成</button>
+    </view>
+  </view>
+  </view>
+</view>

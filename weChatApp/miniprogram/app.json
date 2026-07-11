@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my-tunes/index",
+    "pages/share-detail/index",
+    "pages/upgrade-guide/index",
+    "pages/recommend/index"
+  ],
+  "window": {
+    "backgroundColor": "#0FAE96",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#0FAE96",
+    "navigationBarTitleText": "FH6车辆调校小助手",
+    "navigationBarTextStyle": "white",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#DFFEF7",
+    "selectedColor": "#BFFF00",
+    "backgroundColor": "#075E54",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "快速调校",
+        "iconPath": "images/icons/tune.png",
+        "selectedIconPath": "images/icons/tune-active.png"
+      },
+      {
+        "pagePath": "pages/my-tunes/index",
+        "text": "我的调校",
+        "iconPath": "images/icons/garage.png",
+        "selectedIconPath": "images/icons/garage-active.png"
+      },
+      {
+        "pagePath": "pages/recommend/index",
+        "text": "车辆推荐",
+        "iconPath": "images/icons/car.png",
+        "selectedIconPath": "images/icons/car-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "share-tune",
+  "version": "1.0.0",
+  "description": "FH6 tune share snapshots",
+  "main": "index.js",
+  "license": "ISC",
+  "dependencies": {
+    "wx-server-sdk": "~2.4.0"
+  }
+}

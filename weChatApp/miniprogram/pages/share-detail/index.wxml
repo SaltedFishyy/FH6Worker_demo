@@ -1,0 +1,75 @@
+<view class="share-page">
+  <image class="page-bg" src="../../images/background.jpg" mode="aspectFill"></image>
+  <view class="page-layer">
+  <view class="custom-nav">
+    <view class="custom-nav-title">分享调校</view>
+  </view>
+  <view class="hero">
+    <view>
+      <view class="brand-title">
+        <text class="brand-fh">FH6</text><text class="brand-text">分享调校</text>
+      </view>
+      <view class="subtitle">好友分享的完整调校参数。</view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-card">
+    <view class="state-title">正在读取分享</view>
+    <view class="state-copy">请稍等</view>
+  </view>
+
+  <view wx:elif="{{errorMessage}}" class="state-card">
+    <view class="state-title">无法打开分享</view>
+    <view class="state-copy">{{errorMessage}}</view>
+    <button class="home-button" bindtap="openQuickTune">返回快速调校</button>
+  </view>
+
+  <view wx:else class="result">
+    <view class="result-head">
+      <view>
+        <view class="result-title">{{summary.displayName || summary.useCaseLabel || '车辆'}}{{summary.displayName ? '' : ' 调校'}}</view>
+        <view class="result-meta">{{summary.drivetrain}} · {{summary.tireCompoundLabel}}</view>
+      </view>
+      <view class="performance-wrap">
+        <view class="performance-badge grade-wrap-{{badge.carClass}}">
+          <view class="grade-badge grade-{{badge.carClass}}">{{badge.carClass}}</view>
+          <view class="pi-badge">{{badge.pi}}</view>
+        </view>
+        <view wx:if="{{badge.drivetrain}}" class="drive-badge">{{badge.drivetrain}}</view>
+      </view>
+    </view>
+
+    <block wx:for="{{resultGroups}}" wx:for-item="group" wx:key="key">
+      <view class="result-group">
+        <view class="group-title">{{group.label}}</view>
+        <block wx:for="{{group.items}}" wx:for-item="field" wx:key="rowId">
+          <view class="result-row">
+            <view class="result-label-wrap">
+              <text class="result-label">{{field.label}}</text>
+              <text wx:if="{{field.description}}" class="help-icon" data-title="{{field.label}}" data-description="{{field.description}}" catchtap="showTuneDescription">?</text>
+              <text wx:if="{{field.manualEdited}}" class="edited-badge">已改</text>
+            </view>
+            <view class="result-value">{{field.displayValue}} <text class="unit">{{field.unit}}</text></view>
+          </view>
+        </block>
+      </view>
+    </block>
+
+    <view wx:if="{{warnings.length}}" class="result-group">
+      <view class="group-title">提示</view>
+      <block wx:for="{{warnings}}" wx:key="*this">
+        <view class="plain-note">{{item}}</view>
+      </block>
+    </view>
+
+    <view wx:if="{{nextTestPlan.length}}" class="result-group">
+      <view class="group-title">下一步测试</view>
+      <block wx:for="{{nextTestPlan}}" wx:key="*this">
+        <view class="plain-note">{{item}}</view>
+      </block>
+    </view>
+
+    <button class="home-button" bindtap="openQuickTune">打开快速调校</button>
+  </view>
+  </view>
+</view>

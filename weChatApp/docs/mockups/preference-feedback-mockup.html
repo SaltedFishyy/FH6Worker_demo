@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FH6 调校偏好二次调校效果稿</title>
+  <style>
+    :root {
+      --lime: #baff28;
+      --lime-soft: rgba(186, 255, 40, 0.18);
+      --deep: #042b27;
+      --deep-2: #062f2a;
+      --teal: #4bb5a3;
+      --text: #f4fffb;
+      --muted: rgba(219, 255, 248, 0.72);
+      --ink: #07342f;
+      --panel: rgba(232, 255, 248, 0.76);
+      --line: rgba(255, 255, 255, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #252525;
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--text);
+    }
+
+    .phone {
+      width: 430px;
+      height: 900px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      background:
+        linear-gradient(180deg, rgba(0, 32, 30, 0.35), rgba(0, 20, 18, 0.75)),
+        url("../../miniprogram/images/background.jpg") center / cover no-repeat;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    }
+
+    .status {
+      height: 46px;
+      padding: 18px 22px 0;
+      font-size: 13px;
+      background: rgba(12, 82, 72, 0.58);
+    }
+
+    .nav {
+      height: 62px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      background: rgba(12, 82, 72, 0.58);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .page-hint {
+      margin: 20px 28px 0;
+      padding: 14px 18px;
+      border-radius: 14px;
+      color: var(--ink);
+      background: rgba(232, 255, 248, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+    }
+
+    .page-hint strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .page-hint span {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: rgba(7, 52, 47, 0.72);
+    }
+
+    .sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 704px;
+      padding: 18px 18px 22px;
+      border-radius: 28px 28px 0 0;
+      background: rgba(235, 255, 250, 0.74);
+      border-top: 3px solid var(--lime);
+      box-shadow:
+        0 -18px 42px rgba(0, 0, 0, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(12px);
+    }
+
+    .sheet-scroll {
+      height: 604px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .sheet-scroll::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .sheet-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 2px 4px 14px;
+      color: var(--ink);
+    }
+
+    .sheet-title h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .sheet-title span {
+      font-size: 12px;
+      color: rgba(7, 52, 47, 0.62);
+    }
+
+    .card {
+      margin-bottom: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(238, 255, 251, 0.54);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.76),
+        0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card.dark {
+      color: var(--text);
+      background:
+        radial-gradient(circle at 88% 0%, rgba(186, 255, 40, 0.12), transparent 36%),
+        linear-gradient(145deg, rgba(6, 55, 50, 0.82), rgba(3, 36, 33, 0.78));
+      border-color: rgba(186, 255, 40, 0.34);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 0 0 1px rgba(186, 255, 40, 0.08),
+        0 0 28px rgba(186, 255, 40, 0.08),
+        0 16px 32px rgba(0, 0, 0, 0.18);
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--lime), #d8ff63);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .card.dark .card-title {
+      position: relative;
+      min-height: 46px;
+      padding: 10px 14px 10px 18px;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(186, 255, 40, 0.24), rgba(255, 255, 255, 0.08) 52%, rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(186, 255, 40, 0.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 8px 18px rgba(0, 0, 0, 0.14);
+    }
+
+    .card.dark .card-title::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      bottom: 10px;
+      width: 4px;
+      border-radius: 999px;
+      background: var(--lime);
+      box-shadow: 0 0 12px rgba(186, 255, 40, 0.52);
+    }
+
+    .card-title .icon {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      color: var(--ink);
+      background: rgba(7, 52, 47, 0.08);
+    }
+
+    .card.dark .card-title .icon {
+      color: var(--ink);
+      background: var(--lime);
+      box-shadow: 0 0 16px rgba(186, 255, 40, 0.35);
+    }
+
+    .helper {
+      margin: 12px 4px 2px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(219, 255, 248, 0.72);
+    }
+
+    .slider-row {
+      padding: 15px 6px 8px;
+    }
+
+    .slider-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .dark .slider-head {
+      color: var(--text);
+    }
+
+    .slider-value {
+      color: var(--teal);
+      font-weight: 900;
+    }
+
+    .range-wrap {
+      position: relative;
+      height: 44px;
+      display: grid;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--lime) 0%, var(--lime) 50%, rgba(255, 255, 255, 0.72) 50%, rgba(255, 255, 255, 0.72) 100%);
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 3px solid rgba(255, 255, 255, 0.82);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.26);
+      cursor: pointer;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: -2px;
+      font-size: 12px;
+      color: rgba(7, 52, 47, 0.64);
+    }
+
+    .dark .range-labels {
+      color: rgba(219, 255, 248, 0.64);
+    }
+
+    .chip-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip-row.symptoms {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chip {
+      min-height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 13px;
+      color: var(--text);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.04));
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 8px 16px rgba(0, 0, 0, 0.10);
+    }
+
+    .chip.active {
+      color: var(--ink);
+      border-color: rgba(186, 255, 40, 0.92);
+      background: linear-gradient(135deg, var(--lime), #d8ff63);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.42),
+        0 8px 20px rgba(186, 255, 40, 0.22);
+    }
+
+    .strength {
+      margin: 10px 0 2px;
+      padding: 12px 14px 10px;
+      border-radius: 16px;
+      color: var(--text);
+      background: rgba(3, 42, 38, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .sheet-actions {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 12px;
+    }
+
+    .btn {
+      height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      border-radius: 14px;
+      color: var(--text);
+      background: rgba(3, 42, 38, 0.76);
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.52);
+      background: linear-gradient(135deg, var(--lime), #d8ff63);
+      box-shadow: 0 10px 22px rgba(186, 255, 40, 0.24);
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <div class="status">18:32</div>
+    <div class="nav">FH6车辆调校小助手</div>
+
+    <section class="page-hint">
+      <strong>调校结果已生成，可继续微调</strong>
+      <span>偏好调整会在当前结果上小幅再生成</span>
+    </section>
+
+    <section class="sheet">
+      <div class="sheet-title">
+        <div>
+          <h1>调校偏好</h1>
+          <span>基础偏好 + 齿轮反馈 + 赛道症状</span>
+        </div>
+        <span>模型 v1.2</span>
+      </div>
+
+      <div class="sheet-scroll">
+        <section class="card">
+          <div class="card-title"><span class="icon">◎</span>基础偏好</div>
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>驾驶风格</span>
+              <span class="slider-value" data-value-for="style">100</span>
+            </div>
+            <div class="range-wrap">
+              <input type="range" min="50" max="150" value="100" data-name="style">
+            </div>
+            <div class="range-labels">
+              <span>稳定抓地</span><span>中性</span><span>灵活滑动</span>
+            </div>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>悬挂支撑</span>
+              <span class="slider-value" data-value-for="stiffness">100</span>
+            </div>
+            <div class="range-wrap">
+              <input type="range" min="50" max="150" value="100" data-name="stiffness">
+            </div>
+            <div class="range-labels">
+              <span>软</span><span>中性</span><span>硬</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card dark">
+          <div class="card-title"><span class="icon">⚙</span>齿轮反馈</div>
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>齿轮取向</span>
+              <span class="slider-value" data-value-for="speed">100</span>
+            </div>
+            <div class="range-wrap">
+              <input type="range" min="50" max="150" value="100" data-name="speed">
+            </div>
+            <div class="range-labels">
+              <span>加速</span><span>均衡</span><span>极速</span>
+            </div>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>起步 / 出弯牵引</span>
+              <span class="slider-value" data-value-for="traction">90</span>
+            </div>
+            <div class="range-wrap">
+              <input type="range" min="50" max="150" value="90" data-name="traction">
+            </div>
+            <div class="range-labels">
+              <span>防打滑</span><span>均衡</span><span>更爆发</span>
+            </div>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>换挡衔接</span>
+              <span class="slider-value" data-value-for="shift">112</span>
+            </div>
+            <div class="range-wrap">
+              <input type="range" min="50" max="150" value="112" data-name="shift">
+            </div>
+            <div class="range-labels">
+              <span>挡位更长</span><span>均衡</span><span>保持高转</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card dark">
+          <div class="card-title"><span class="icon">⌖</span>赛道反馈</div>
+          <p class="helper">差速器仅在弯道症状明确时小幅联动，避免普通齿轮调整带来连锁反应。</p>
+
+          <div class="chip-row" data-group="scene">
+            <button class="chip active">低速弯</button>
+            <button class="chip">中高速弯</button>
+          </div>
+
+          <div class="chip-row symptoms" data-group="symptom">
+            <button class="chip">入弯推头</button>
+            <button class="chip active">弯中推头</button>
+            <button class="chip">出弯打滑</button>
+            <button class="chip">减速不稳</button>
+          </div>
+        </section>
+
+        <section class="strength">
+          <div class="slider-head">
+            <span>修正强度</span>
+            <span class="slider-value" data-value-for="strength">100</span>
+          </div>
+          <div class="range-wrap">
+            <input type="range" min="50" max="150" value="100" data-name="strength">
+          </div>
+          <div class="range-labels">
+            <span>轻微</span><span>标准</span><span>明显</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="sheet-actions">
+        <button class="btn">取消</button>
+        <button class="btn primary">完成并重新生成</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function paintRange(input) {
+      const min = Number(input.min);
+      const max = Number(input.max);
+      const value = Number(input.value);
+      const pct = ((value - min) / (max - min)) * 100;
+      input.style.background =
+        `linear-gradient(90deg, var(--lime) 0%, var(--lime) ${pct}%, rgba(255,255,255,.72) ${pct}%, rgba(255,255,255,.72) 100%)`;
+      const label = document.querySelector(`[data-value-for="${input.dataset.name}"]`);
+      if (label) label.textContent = value;
+    }
+
+    document.querySelectorAll('input[type="range"]').forEach(input => {
+      paintRange(input);
+      input.addEventListener('input', () => paintRange(input));
+    });
+
+    const symptomOptions = {
+      '低速弯': ['入弯推头', '弯中推头', '出弯打滑', '减速不稳'],
+      '中高速弯': ['高速入弯不稳', '弯中推头', '高速甩尾', '车身跳动']
+    };
+
+    function renderSymptoms(scene) {
+      const group = document.querySelector('[data-group="symptom"]');
+      const options = symptomOptions[scene] || symptomOptions['低速弯'];
+      group.innerHTML = options.map((item, index) => {
+        const active = index === 1 ? ' active' : '';
+        return `<button class="chip${active}">${item}</button>`;
+      }).join('');
+    }
+
+    document.querySelectorAll('[data-group]').forEach(group => {
+      group.addEventListener('click', event => {
+        const btn = event.target.closest('button');
+        if (!btn) return;
+        group.querySelectorAll('button').forEach(item => item.classList.remove('active'));
+        btn.classList.add('active');
+        if (group.dataset.group === 'scene') {
+          renderSymptoms(btn.textContent.trim());
+        }
+      });
+    });
+  </script>
+</body>
+</html>

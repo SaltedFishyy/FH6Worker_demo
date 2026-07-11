@@ -1,0 +1,88 @@
+<view class="guide-page">
+  <image class="page-bg" src="../../images/background.jpg" mode="aspectFill"></image>
+  <view class="page-layer">
+  <view class="custom-nav">
+    <view class="custom-nav-title"></view>
+  </view>
+  <view class="hero">
+    <view class="hero-copy">
+      <view class="brand-title">
+        <text class="brand-fh">FH6</text><text class="brand-text">改装配件攻略</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="guide-entry">
+    <view class="entry-kicker">改装逻辑</view>
+    <view class="entry-title">先确定用途，再分配 PI 预算</view>
+    <view class="entry-copy">低等级优先低 PI 高收益件；中等级先底盘抓地再补动力；高等级需要完整底盘、轮胎、刹车和空力。</view>
+  </view>
+
+  <scroll-view class="tabs" scroll-x="true" enable-flex="true">
+    <block wx:for="{{useCaseTabs}}" wx:key="value">
+      <view class="tab {{activeUseCase == item.value ? 'tab-active' : ''}}" data-index="{{index}}" bindtap="onUseCaseTap">
+        <image class="tab-icon" src="{{activeUseCase == item.value ? item.activeIcon : item.icon}}" mode="aspectFit"></image>
+        <text>{{item.label}}</text>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="filter-title">级别选择</view>
+  <scroll-view class="class-tabs" scroll-x="true" enable-flex="true">
+    <block wx:for="{{classTabs}}" wx:key="value">
+      <view class="class-tab {{activeClass == item.value ? 'class-tab-active' : ''}} class-tab-{{item.value}}" data-index="{{index}}" bindtap="onClassTap">{{item.label}}</view>
+    </block>
+  </scroll-view>
+
+  <view class="objective-card">
+    <view class="objective-head">
+      <view>
+        <view class="objective-kicker">{{guide.title}}</view>
+        <view class="objective-title">{{guide.classLabel}} 级配件优先级</view>
+      </view>
+      <view class="class-chip">适用 {{guide.classRangeLabel}}</view>
+    </view>
+    <view class="objective-line">
+      <view class="line-label">核心目标</view>
+      <view class="line-copy">{{guide.objective}}</view>
+    </view>
+    <view class="objective-line">
+      <view class="line-label">避免</view>
+      <view class="line-copy">{{guide.avoid}}</view>
+    </view>
+    <view class="group-summary">{{guide.groupSummary}}</view>
+  </view>
+
+  <block wx:for="{{guide.priorities}}" wx:for-item="priority" wx:key="key">
+    <view class="priority-card priority-{{priority.tone}}">
+      <view class="priority-title">{{priority.label}}</view>
+      <block wx:for="{{priority.items}}" wx:for-item="upgrade" wx:key="name">
+        <view class="upgrade-row">
+          <view class="upgrade-name">{{upgrade.name}}</view>
+          <view class="upgrade-note">{{upgrade.note}}</view>
+        </view>
+      </block>
+    </view>
+  </block>
+
+  <view class="bottom-note">
+    <view class="note-title">使用顺序</view>
+    <view class="note-copy">先根据本页选择配件，再回到快速调校生成基础参数。实测后根据赛道表现继续微调。</view>
+  </view>
+
+  <view class="shortcut-row">
+    <view class="shortcut-item" bindtap="openQuickTune">
+      <image class="shortcut-icon" src="../../images/icons/tune.png" mode="aspectFit"></image>
+      <text class="shortcut-text">快速调校</text>
+    </view>
+    <view class="shortcut-item" bindtap="openMyTunes">
+      <image class="shortcut-icon" src="../../images/icons/garage.png" mode="aspectFit"></image>
+      <text class="shortcut-text">我的调校</text>
+    </view>
+    <view class="shortcut-item" bindtap="openRecommend">
+      <image class="shortcut-icon" src="../../images/icons/car.png" mode="aspectFit"></image>
+      <text class="shortcut-text">车辆推荐</text>
+    </view>
+  </view>
+  </view>
+</view>

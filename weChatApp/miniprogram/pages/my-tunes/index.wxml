@@ -1,0 +1,87 @@
+<view class="my-page">
+  <image class="page-bg" src="../../images/background.jpg" mode="aspectFill"></image>
+  <view class="page-layer">
+  <view class="custom-nav">
+    <view class="custom-nav-title"></view>
+  </view>
+  <view class="hero">
+    <view>
+      <view class="brand-title">
+        <text class="brand-fh">FH6</text><text class="brand-text">我的调校</text>
+      </view>
+    </view>
+    <view class="count-pill">已保存 {{records.length}} 条</view>
+  </view>
+
+  <view wx:if="{{records.length > 0}}" class="toolbar">
+    <view class="toolbar-title">最近生成</view>
+    <view class="clear-button" bindtap="clearAll">清空</view>
+  </view>
+
+  <view wx:if="{{records.length == 0}}" class="empty-state">
+    <view class="empty-title">暂无保存的调校</view>
+    <view class="empty-copy">生成调校成功后，会自动保存到这里，方便以后查看。</view>
+  </view>
+
+  <view class="record-list">
+    <block wx:for="{{records}}" wx:for-item="record" wx:key="id">
+      <view class="record-card">
+        <view class="record-head" data-id="{{record.id}}" bindtap="toggleRecord">
+          <view class="record-copy">
+            <view class="record-title-row">
+              <view class="record-title">{{record.displayName}}</view>
+              <view class="rename-button" data-id="{{record.id}}" catchtap="renameRecord">编辑</view>
+            </view>
+            <view class="record-meta">{{record.summary.drivetrain}} · {{record.summary.tireCompoundLabel}} · {{record.createdAtText}}</view>
+          </view>
+          <view class="performance-badge grade-wrap-{{record.summary.carClass}}">
+            <view class="grade-badge grade-{{record.summary.carClass}}">{{record.summary.carClass}}</view>
+            <view class="pi-badge">{{record.summary.pi}}</view>
+          </view>
+        </view>
+
+        <view wx:if="{{record.expanded}}" class="record-detail">
+          <view class="detail-actions">
+            <view wx:if="{{!record.shareReady}}" class="share-record-button" data-id="{{record.id}}" catchtap="prepareRecordShare">{{record.shareLoading ? '生成中' : '分享'}}</view>
+            <button wx:else class="share-record-button share-record-native" data-id="{{record.id}}" open-type="share">分享给好友</button>
+            <view class="delete-button" data-id="{{record.id}}" catchtap="deleteRecord">删除</view>
+          </view>
+
+          <block wx:for="{{record.resultGroups}}" wx:for-item="group" wx:key="key">
+            <view class="result-group">
+              <view class="group-title">{{group.label}}</view>
+              <block wx:for="{{group.items}}" wx:for-item="field" wx:key="rowId">
+                <view class="result-row">
+                  <view class="result-label-wrap">
+                    <text class="result-label">{{field.label}}</text>
+                    <text wx:if="{{field.description}}" class="help-icon" data-title="{{field.label}}" data-description="{{field.description}}" catchtap="showTuneDescription">?</text>
+                    <text wx:if="{{field.manualEdited}}" class="edited-badge">已改</text>
+                  </view>
+                  <view class="result-value" data-id="{{record.id}}" data-field-key="{{field.fieldKey}}" data-editable="{{field.editable}}" bindtap="onRecordValueTap">
+                    <input wx:if="{{editingRecordId == record.id && editingFieldKey == field.fieldKey}}" class="edit-input" type="text" value="{{editingValue}}" focus data-id="{{record.id}}" data-field-key="{{field.fieldKey}}" bindinput="onEditInput" bindblur="finishRecordFieldEdit" bindconfirm="finishRecordFieldEdit" confirm-type="done" />
+                    <block wx:else>{{field.displayValue}} <text class="unit">{{field.unit}}</text></block>
+                  </view>
+                </view>
+              </block>
+            </view>
+          </block>
+
+          <view wx:if="{{record.warnings.length}}" class="result-group">
+            <view class="group-title">提示</view>
+            <block wx:for="{{record.warnings}}" wx:key="*this">
+              <view class="plain-note">{{item}}</view>
+            </block>
+          </view>
+
+          <view wx:if="{{record.nextTestPlan.length}}" class="result-group">
+            <view class="group-title">下一步测试</view>
+            <block wx:for="{{record.nextTestPlan}}" wx:key="*this">
+              <view class="plain-note">{{item}}</view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+  </view>
+</view>
